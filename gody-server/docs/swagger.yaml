@@ -1,0 +1,564 @@
+basePath: /
+definitions:
+  models.ActionRun:
+    properties:
+      action_id:
+        type: integer
+    type: object
+  models.Actions:
+    properties:
+      action_name:
+        type: string
+      action_type:
+        description: '1: github, 2: gitlab, 3: bitbucket'
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      steps:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Task:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  models.Token:
+    properties:
+      id:
+        type: integer
+    type: object
+  models.TokenVerify:
+    properties:
+      token:
+        type: string
+    type: object
+  models.UsersCreate:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.UsersPut:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact: {}
+  description: Description of specifications
+  title: gody-server
+  version: version(1.0)
+paths:
+  /actions:
+    get:
+      consumes:
+      - application/json
+      description: Get Actions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Actions
+      tags:
+      - Actions
+    post:
+      consumes:
+      - application/json
+      description: Post Actions
+      parameters:
+      - description: Body to create Actions
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Actions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Actions
+      tags:
+      - Actions
+  /actions/{actionsId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Actions
+      parameters:
+      - description: actionsId
+        in: path
+        name: actionsId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Delete Actions
+      tags:
+      - Actions
+    get:
+      consumes:
+      - application/json
+      description: Get Actions
+      parameters:
+      - description: actionsId
+        in: path
+        name: actionsId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Actions
+      tags:
+      - Actions
+    put:
+      consumes:
+      - application/json
+      description: Put Actions
+      parameters:
+      - description: actionsId
+        in: path
+        name: actionsId
+        required: true
+        type: integer
+      - description: Body to update Actions
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Actions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Put Actions
+      tags:
+      - Actions
+  /actions/run:
+    post:
+      consumes:
+      - application/json
+      description: Post Actions
+      parameters:
+      - description: Body to create ActionRun
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.ActionRun'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Actions
+      tags:
+      - Actions
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: Get Tasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+      security:
+      - BearerAuth: []
+      summary: Get Tasks
+      tags:
+      - Tasks
+    post:
+      consumes:
+      - application/json
+      description: Create Tasks
+      parameters:
+      - description: Body to create Tasks
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task created successfully
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Create Tasks
+      tags:
+      - Tasks
+  /tasks/{taskId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Tasks
+      parameters:
+      - description: taskId
+        in: path
+        name: taskId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task deleted successfully
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete Tasks
+      tags:
+      - Tasks
+    get:
+      consumes:
+      - application/json
+      description: Get Tasks
+      parameters:
+      - description: taskId
+        in: path
+        name: taskId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+      security:
+      - BearerAuth: []
+      summary: Get Tasks
+      tags:
+      - Tasks
+    put:
+      consumes:
+      - application/json
+      description: Update Tasks
+      parameters:
+      - description: taskId
+        in: path
+        name: taskId
+        required: true
+        type: integer
+      - description: Body to update
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task updated successfully
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Update Tasks
+      tags:
+      - Tasks
+  /token:
+    get:
+      consumes:
+      - application/json
+      description: Get Token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Token
+      tags:
+      - Token
+    post:
+      consumes:
+      - application/json
+      description: Post Token
+      parameters:
+      - description: Body to create Token
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Token'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Token
+      tags:
+      - Token
+  /token/{tokenId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Token
+      parameters:
+      - description: tokenId
+        in: path
+        name: tokenId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Delete Token
+      tags:
+      - Token
+    get:
+      consumes:
+      - application/json
+      description: Get Token
+      parameters:
+      - description: tokenId
+        in: path
+        name: tokenId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Token
+      tags:
+      - Token
+    put:
+      consumes:
+      - application/json
+      description: Put Token
+      parameters:
+      - description: tokenId
+        in: path
+        name: tokenId
+        required: true
+        type: integer
+      - description: Body to update Token
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Token'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Put Token
+      tags:
+      - Token
+  /token/verify:
+    post:
+      consumes:
+      - application/json
+      description: Post Token
+      parameters:
+      - description: Body to verify
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.TokenVerify'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Token
+      tags:
+      - Token
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Post Users
+      parameters:
+      - description: Body to create Users
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.UsersCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Users
+      tags:
+      - Users
+  /users/{usersId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Users
+      parameters:
+      - description: usersId
+        in: path
+        name: usersId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Delete Users
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Get Users
+      parameters:
+      - description: usersId
+        in: path
+        name: usersId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Users
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Put Users
+      parameters:
+      - description: usersId
+        in: path
+        name: usersId
+        required: true
+        type: integer
+      - description: Body to update Users
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.UsersPut'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Put Users
+      tags:
+      - Users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Post Users
+      parameters:
+      - description: Body to login
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Users
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

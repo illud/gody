@@ -1,0 +1,5 @@
+{
+    "name": "gody-server",
+    "ip": "localhost",
+    "port": "5000"
+}

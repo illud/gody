@@ -1,0 +1,16 @@
+{
+  "modules": [
+    {
+      "moduleName": "users",
+      "endpointName": "users"
+    },
+    {
+      "moduleName": "actions",
+      "endpointName": "actions"
+    },
+    {
+      "moduleName": "token",
+      "endpointName": "token"
+    }
+  ]
+}
