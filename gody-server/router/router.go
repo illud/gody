@@ -23,15 +23,18 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		//If one of this paths will be ignore
 		if c.FullPath() == "/swagger/*any" ||
 			strings.HasPrefix(c.FullPath(), "/gody") ||
-			c.FullPath() == "/users/login" {
+			c.FullPath() == "/users/login" ||
+			c.FullPath() == "/token/verify" {
 		} else {
 			// auth := c.GetHeader("Authorization")
 			// validateToken := jwt.ValidateToken(auth)
 
-			token := c.Request.Cookies()
+			// token := c.Request.Cookies()
+			token := c.GetHeader("Authorization")
+
 			if len(token) != 0 {
-				err := jwtService.ValidateToken(strings.Replace(token[0].String(), "token=", "", 1))
-				if err != "Error" {
+				err := jwtService.ValidateToken(token)
+				if err != "Ok" {
 					c.JSON(403, gin.H{
 						"data": "Invalid Token",
 					})
@@ -54,10 +57,15 @@ func Router() *gin.Engine {
 
 	router := gin.New()
 
-	//Token Auth Middleware
-	// router.Use(TokenAuthMiddleware())
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:  []string{"*"},
+		AllowMethods:  []string{"POST", "OPTIONS", "GET", "PUT", "DELETE"},
+		AllowHeaders:  []string{"Accept", "Authorization", "Content-Type", "Content-Length", "X-CSRF-Token", "Token", "session", "Origin", "Host", "Connection", "Accept-Encoding", "Accept-Language", "X-Requested-With"},
+		ExposeHeaders: []string{"X-Total-Count", "Content-Range"},
+	}))
 
-	router.Use(cors.Default())
+	//Token Auth Middleware
+	router.Use(TokenAuthMiddleware())
 
 	// Serve static files from the build folder
 	router.StaticFS("/gody", http.Dir("./gody"))

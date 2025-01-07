@@ -1,5 +1,12 @@
 
 import config from "../../../public/config.json"
+import { useTokenStore } from '../../services/zustand/zustand';
+
+
+export const getTokenFromStore = () => {
+    const { token } = useTokenStore.getState();
+    return token;
+  };
 
 interface IActionStep {
     step_type: Number,
@@ -69,6 +76,7 @@ export const CreateActionApi = async (actionName: String, github: {
             credentials: 'omit',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${getTokenFromStore()}`
             },
             body: JSON.stringify(body),
         }).then((response) => response)
@@ -143,6 +151,7 @@ export const EditActionApi = async (actionId: number, actionName: String, github
             credentials: 'omit',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${getTokenFromStore()}`
             },
             body: JSON.stringify(body),
         }).then((response) => response)
@@ -165,6 +174,7 @@ export const Run = async (actionId: number) => {
             credentials: 'omit',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${getTokenFromStore()}`
             },
             body: JSON.stringify(body),
         }).then((response) => response)
@@ -184,6 +194,7 @@ export const GetActionsApi = async () => {
             credentials: 'omit',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${getTokenFromStore()}`
             },
         }).then((response) => response)
         let result = await rawResult.json()
@@ -202,6 +213,7 @@ export const DeleteActionsApi = async (actionsId: number) => {
             credentials: 'omit',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `${getTokenFromStore()}`
             },
         }).then((response) => response)
         let result = await rawResult.json()

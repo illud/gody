@@ -15,6 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom'
 import { useTokenStore } from '../../services/zustand/zustand';
 import { toast } from 'react-toastify';
+import config from "../../../public/config.json"
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -41,7 +42,7 @@ function ResponsiveAppBar() {
   };
 
   const verifyToken = async (token: String) => {
-    var apilUrl = "http://localhost:5000"
+    var apilUrl = config.url + ":" + config.port
     try {
       var body = {
         token,
@@ -51,6 +52,7 @@ function ResponsiveAppBar() {
         credentials: 'omit',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `${token}`
         },
         body: JSON.stringify(body),
       }).then((response) => response)
