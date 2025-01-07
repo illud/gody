@@ -1,7 +1,18 @@
-import config from "../../../public/config.json"
+
+
+const getConfigFile = async () => {
+    try {
+        const response = await fetch('/config');  // The path to the config.json file inside the public folder
+        const data = await response.json();  // Parse the JSON
+        return data.data;  // Return the configuration data
+    } catch (err) {
+        throw err;  // Throw an error if the fetch fails
+    }
+}
 
 export const LoginApi = async (username: String, password: String) => {
-    var apilUrl = config.url + ":" + config.port 
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
     try {
         var body = {
             username: username,

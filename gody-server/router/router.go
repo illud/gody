@@ -1,7 +1,11 @@
 package router
 
 import (
+	"encoding/json"
+	"io"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	actionsController "github.com/gody-server/app/actions/aplication"
@@ -24,7 +28,8 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		if c.FullPath() == "/swagger/*any" ||
 			strings.HasPrefix(c.FullPath(), "/gody") ||
 			c.FullPath() == "/users/login" ||
-			c.FullPath() == "/token/verify" {
+			c.FullPath() == "/token/verify" ||
+			c.FullPath() == "/config" {
 		} else {
 			// auth := c.GetHeader("Authorization")
 			// validateToken := jwt.ValidateToken(auth)
@@ -73,6 +78,38 @@ func Router() *gin.Engine {
 	//SWAGGER
 	docs.SwaggerInfo.BasePath = "/"
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	router.GET("/config", func(c *gin.Context) {
+		type ConfigFile struct {
+			Name string `json:"name"`
+			IP   string `json:"ip"`
+			Port string `json:"port"`
+			Url  string `json:"url"`
+		}
+
+		file, err := os.Open("config.json")
+		if err != nil {
+			log.Fatalf("Error opening file: %v", err)
+		}
+		defer file.Close()
+
+		// Read the file contents into a byte slice
+		fileBytes, err := io.ReadAll(file)
+		if err != nil {
+			log.Fatalf("Error reading file: %v", err)
+		}
+
+		// Unmarshal the JSON data into a Person struct
+		var configFile ConfigFile
+		err = json.Unmarshal(fileBytes, &configFile)
+		if err != nil {
+			log.Fatalf("Error unmarshalling JSON: %v", err)
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"data": configFile,
+		})
+	})
 
 	//users
 	router.POST("/users/login", usersController.Login)

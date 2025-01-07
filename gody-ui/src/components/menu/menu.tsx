@@ -15,7 +15,6 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom'
 import { useTokenStore } from '../../services/zustand/zustand';
 import { toast } from 'react-toastify';
-import config from "../../../public/config.json"
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -41,8 +40,19 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const getConfigFile = async () => {
+    try {
+      const response = await fetch('/config');  // The path to the config.json file inside the public folder
+      const data = await response.json();  // Parse the JSON
+      return data.data;  // Return the configuration data
+    } catch (err) {
+      throw err;  // Throw an error if the fetch fails
+    }
+  }
+
   const verifyToken = async (token: String) => {
-    var apilUrl = config.url + ":" + config.port
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
     try {
       var body = {
         token,
@@ -73,9 +83,9 @@ function ResponsiveAppBar() {
           navigate("/");
         }
       })
-    }else{
+    } else {
       toast("You are not logged in!", { type: "error" });
-      
+
       navigate("/");
     }
   }, []);

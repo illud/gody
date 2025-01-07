@@ -16,6 +16,7 @@ type ConfigFile struct {
 	Name string `json:"name"`
 	IP   string `json:"ip"`
 	Port string `json:"port"`
+	Url  string `json:"url"`
 }
 
 //The next lines are for swagger docs

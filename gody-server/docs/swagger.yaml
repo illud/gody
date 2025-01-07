@@ -9,9 +9,6 @@ definitions:
     properties:
       action_name:
         type: string
-      action_type:
-        description: '1: github, 2: gitlab, 3: bitbucket'
-        type: integer
       created_at:
         type: string
       id:
@@ -26,15 +23,6 @@ definitions:
       password:
         type: string
       username:
-        type: string
-    type: object
-  models.Task:
-    properties:
-      description:
-        type: string
-      id:
-        type: integer
-      title:
         type: string
     type: object
   models.Token:
@@ -193,119 +181,6 @@ paths:
       summary: Post Actions
       tags:
       - Actions
-  /tasks:
-    get:
-      consumes:
-      - application/json
-      description: Get Tasks
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Task'
-      security:
-      - BearerAuth: []
-      summary: Get Tasks
-      tags:
-      - Tasks
-    post:
-      consumes:
-      - application/json
-      description: Create Tasks
-      parameters:
-      - description: Body to create Tasks
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Task'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Task created successfully
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Create Tasks
-      tags:
-      - Tasks
-  /tasks/{taskId}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete Tasks
-      parameters:
-      - description: taskId
-        in: path
-        name: taskId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Task deleted successfully
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Delete Tasks
-      tags:
-      - Tasks
-    get:
-      consumes:
-      - application/json
-      description: Get Tasks
-      parameters:
-      - description: taskId
-        in: path
-        name: taskId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Task'
-      security:
-      - BearerAuth: []
-      summary: Get Tasks
-      tags:
-      - Tasks
-    put:
-      consumes:
-      - application/json
-      description: Update Tasks
-      parameters:
-      - description: taskId
-        in: path
-        name: taskId
-        required: true
-        type: integer
-      - description: Body to update
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/models.Task'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Task updated successfully
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Update Tasks
-      tags:
-      - Tasks
   /token:
     get:
       consumes:

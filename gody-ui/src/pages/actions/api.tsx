@@ -1,12 +1,21 @@
 
-import config from "../../../public/config.json"
+
 import { useTokenStore } from '../../services/zustand/zustand';
 
+const getConfigFile = async () => {
+    try {
+        const response = await fetch('/config');  // The path to the config.json file inside the public folder
+        const data = await response.json();  // Parse the JSON
+        return data.data;  // Return the configuration data
+    } catch (err) {
+        throw err;  // Throw an error if the fetch fails
+    }
+}
 
 export const getTokenFromStore = () => {
     const { token } = useTokenStore.getState();
     return token;
-  };
+};
 
 interface IActionStep {
     step_type: Number,
@@ -68,7 +77,9 @@ export const CreateActionApi = async (actionName: String, github: {
         steps: stepsAction
     }
 
-    var apilUrl = config.url + ":" + config.port
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
+
     try {
 
         let rawResult = await fetch(`${apilUrl}/actions`, {
@@ -143,7 +154,8 @@ export const EditActionApi = async (actionId: number, actionName: String, github
         steps: stepsAction
     }
 
-    var apilUrl = config.url + ":" + config.port
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
     try {
 
         let rawResult = await fetch(`${apilUrl}/actions/${actionId}`, {
@@ -164,7 +176,8 @@ export const EditActionApi = async (actionId: number, actionName: String, github
 }
 
 export const Run = async (actionId: number) => {
-    var apilUrl = config.url + ":" + config.port
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
     try {
         var body = {
             action_id: actionId,
@@ -187,7 +200,8 @@ export const Run = async (actionId: number) => {
 }
 
 export const GetActionsApi = async () => {
-    var apilUrl = config.url + ":" + config.port
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
     try {
         let rawResult = await fetch(`${apilUrl}/actions`, {
             method: 'GET',
@@ -206,7 +220,8 @@ export const GetActionsApi = async () => {
 }
 
 export const DeleteActionsApi = async (actionsId: number) => {
-    var apilUrl = config.url + ":" + config.port
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
     try {
         let rawResult = await fetch(`${apilUrl}/actions/${actionsId}`, {
             method: 'DELETE',
