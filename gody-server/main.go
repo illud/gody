@@ -35,7 +35,7 @@ func main() {
 	// Open the JSON file
 	file, err := os.Open("config.json")
 	if err != nil {
-		log.Fatalf("Error opening file: %v", err)
+		log.Fatalf("Error opening file in main: %v", err)
 	}
 	defer file.Close()
 

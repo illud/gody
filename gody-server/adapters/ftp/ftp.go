@@ -10,7 +10,6 @@ import (
 )
 
 func Ftp(ftpServer string, username string, password string, projectPath string, remoteProjectPath string) error {
-
 	// Change the working directory to the project path
 	absPath, err := filepath.Abs(projectPath)
 	if err != nil {

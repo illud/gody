@@ -100,5 +100,6 @@ func gitPull(projectPath string, branch string) error {
 	if err != nil {
 		return err
 	}
+
 	return nil
 }

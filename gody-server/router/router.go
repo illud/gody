@@ -89,14 +89,14 @@ func Router() *gin.Engine {
 
 		file, err := os.Open("config.json")
 		if err != nil {
-			log.Fatalf("Error opening file: %v", err)
+			log.Fatalf("Error opening file in router: %v", err)
 		}
 		defer file.Close()
 
 		// Read the file contents into a byte slice
 		fileBytes, err := io.ReadAll(file)
 		if err != nil {
-			log.Fatalf("Error reading file: %v", err)
+			log.Fatalf("Error reading file in router: %v", err)
 		}
 
 		// Unmarshal the JSON data into a Person struct

@@ -42,13 +42,13 @@ function ResponsiveAppBar() {
 
   const getConfigFile = async () => {
     try {
-      const response = await fetch('/config');  // The path to the config.json file inside the public folder
-      const data = await response.json();  // Parse the JSON
-      return data.data;  // Return the configuration data
+        const response = await fetch('/config');  // The path to the config.json file inside the public folder
+        const data = await response.json();  // Parse the JSON
+        return data.data;  // Return the configuration data
     } catch (err) {
-      throw err;  // Throw an error if the fetch fails
+        throw err;  // Throw an error if the fetch fails
     }
-  }
+}
 
   const verifyToken = async (token: String) => {
     const config = await getConfigFile(); // Wait for the config to load

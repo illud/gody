@@ -86,6 +86,12 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 		return err
 	}
 
+	originalDir, err := os.Getwd()
+	fmt.Println("originalDir github: ", originalDir)
+	if err != nil {
+		return err
+	}
+
 	if action.Github.GithubExecute {
 		// Change the working directory to the project path
 		absPath, err := filepath.Abs(action.Github.GithubProjectPath)
@@ -102,6 +108,7 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 		if err != nil {
 			return err
 		}
+
 	}
 
 	for _, step := range action.Steps {
@@ -186,11 +193,10 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 	}
 
 	if action.Ftp.FtpExecute {
-		err := ftp.Ftp(action.Ftp.FtpServer, action.Ftp.Username, action.Ftp.Password, action.Ftp.ProjectPath, action.Ftp.FtpDirectory)
+		err = ftp.Ftp(action.Ftp.FtpServer, action.Ftp.Username, action.Ftp.Password, action.Ftp.ProjectPath, action.Ftp.FtpDirectory)
 		if err != nil {
 			fmt.Println(err)
 		}
-
 	}
 
 	// Run `git pull origin main` to pull the latest changes
@@ -214,5 +220,11 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 	if err != nil {
 		return err
 	}
+
+	err = os.Chdir(originalDir)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
