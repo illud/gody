@@ -31,7 +31,7 @@ func CheckAndUpdateRepository(githubToken string, repositoryOwner string, reposi
 	// Compare the commit hashes
 	if localCommitHash != latestCommitHash {
 		// If hashes are different, pull the latest changes from the remote main branch
-		err := gitPull(projectPath)
+		err := gitPull(projectPath, branchName)
 		if err != nil {
 			return err
 		}
@@ -78,7 +78,7 @@ func getLocalCommitHash(projectPath string) (string, error) {
 }
 
 // Pull the latest changes from the remote main branch
-func gitPull(projectPath string) error {
+func gitPull(projectPath string, branch string) error {
 	// Run `git pull origin main` to pull the latest changes
 
 	// Change the working directory to the project path
@@ -93,7 +93,7 @@ func gitPull(projectPath string) error {
 	}
 
 	// Run `git pull origin main` to pull the latest changes
-	cmd := exec.Command("git", "pull", "origin", "main")
+	cmd := exec.Command("git", "pull", "origin", branch)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
