@@ -1,12 +1,16 @@
 import '../../App.css';
-import TextField from '@mui/material/TextField';
+import { TextField, IconButton, InputAdornment } from '@mui/material';
 import { useState } from 'react';
 import { CreateActionApi } from './api';
 import { ToastContainer, toast } from 'react-toastify';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Menu from '../../components/menu/menu'
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import BackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom'
 
 function CreateGithubAction() {
     const navigate = useNavigate();
@@ -100,6 +104,12 @@ function CreateGithubAction() {
         setStepsText(newSteps);
     };
 
+    const [showPassword, setShowPassword] = useState(false);
+    // Toggle visibility of password
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
     const StepsTexts = (index: number) => (
         <div key={index}>
             <p>{`Step ${index + 1}`}</p>
@@ -120,7 +130,7 @@ function CreateGithubAction() {
                 value={stepsText[index] || ''}
                 onChange={(e) => handleStepChange(index, e.target.value)}
             />
-            <button onClick={() => deleteStep(index)} style={{ marginLeft: '10px' }}>
+            <button className="primary-btn" onClick={() => deleteStep(index)} style={{ marginLeft: '10px' }}>
                 X
             </button>
         </div>
@@ -131,8 +141,11 @@ function CreateGithubAction() {
             <Menu />
             <br></br>
             <br></br>
-
-            <h3>Adding GitHub step</h3>
+            <br></br>
+            <Link to="/actions">
+                <BackIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            </Link>
+            <h3>Creating new action</h3>
             <p className="read-the-docs">
                 By default the action will always check if theres a new change commited to the repository and will run the steps you define.
             </p>
@@ -193,9 +206,22 @@ function CreateGithubAction() {
                                 id="standard-basic"
                                 label="Github token"
                                 variant="standard"
+                                type={showPassword ? 'text' : 'password'}
                                 slotProps={{
                                     input: {
                                         style: { color: 'white' },
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    edge="end"
+                                                    style={{ color: 'white' }}
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
                                     },
                                     inputLabel: {
                                         style: { color: 'grey' },
@@ -310,9 +336,22 @@ function CreateGithubAction() {
                             id="standard-basic"
                             label="FTP Password"
                             variant="standard"
+                            type={showPassword ? 'text' : 'password'}
                             slotProps={{
                                 input: {
                                     style: { color: 'white' },
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                edge="end"
+                                                style={{ color: 'white' }}
+                                            >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
                                 },
                                 inputLabel: {
                                     style: { color: 'grey' },
@@ -372,11 +411,11 @@ function CreateGithubAction() {
 
             <br />
             <br />
-            <button onClick={addStep}>Add Step</button>
+            <button className="primary-btn" onClick={addStep}>Add Step</button>
 
             <br />
             <br />
-            {loading ? <div>Loading...</div> : <button onClick={CreateAction}>Create Action</button>}
+            {loading ? <div>Loading...</div> : <button className="primary-btn" onClick={CreateAction}>Create Action</button>}
             <ToastContainer />
         </>
     );

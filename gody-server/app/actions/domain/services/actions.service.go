@@ -216,12 +216,12 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 	// 	return err
 	// }
 
-	err = s.actionsRepository.Run(actions)
+	err = os.Chdir(originalDir)
 	if err != nil {
 		return err
 	}
 
-	err = os.Chdir(originalDir)
+	err = s.actionsRepository.Run(actions)
 	if err != nil {
 		return err
 	}

@@ -11,10 +11,11 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import { Link, useNavigate } from 'react-router-dom'
 import { useTokenStore } from '../../services/zustand/zustand';
 import { toast } from 'react-toastify';
+import { getConfigFile } from '../../services/url';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -39,16 +40,6 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const getConfigFile = async () => {
-    try {
-        const response = await fetch('/config');  // The path to the config.json file inside the public folder
-        const data = await response.json();  // Parse the JSON
-        return data.data;  // Return the configuration data
-    } catch (err) {
-        throw err;  // Throw an error if the fetch fails
-    }
-}
 
   const verifyToken = async (token: String) => {
     const config = await getConfigFile(); // Wait for the config to load
@@ -91,15 +82,15 @@ function ResponsiveAppBar() {
   }, []);
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" style={{ backgroundColor: "#446ee2" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <AutoGraphIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            // href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -147,12 +138,12 @@ function ResponsiveAppBar() {
 
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <AutoGraphIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            // href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },

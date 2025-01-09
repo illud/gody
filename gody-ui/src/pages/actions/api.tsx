@@ -1,16 +1,7 @@
 
 
 import { useTokenStore } from '../../services/zustand/zustand';
-
-const getConfigFile = async () => {
-    try {
-        const response = await fetch('/config');  // The path to the config.json file inside the public folder
-        const data = await response.json();  // Parse the JSON
-        return data.data;  // Return the configuration data
-    } catch (err) {
-        throw err;  // Throw an error if the fetch fails
-    }
-}
+import { getConfigFile } from '../../services/url';
 
 export const getTokenFromStore = () => {
     const { token } = useTokenStore.getState();

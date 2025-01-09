@@ -1,11 +1,8 @@
 package router
 
 import (
-	"encoding/json"
-	"io"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
 	actionsController "github.com/gody-server/app/actions/aplication"
@@ -16,6 +13,7 @@ import (
 	usersController "github.com/gody-server/app/users/aplication"
 
 	jwtService "github.com/gody-server/adapters/jwt"
+	configFile "github.com/gody-server/config"
 	docs "github.com/gody-server/docs"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -80,30 +78,9 @@ func Router() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	router.GET("/config", func(c *gin.Context) {
-		type ConfigFile struct {
-			Name string `json:"name"`
-			IP   string `json:"ip"`
-			Port string `json:"port"`
-			Url  string `json:"url"`
-		}
-
-		file, err := os.Open("config.json")
+		configFile, err := configFile.ConfigFile()
 		if err != nil {
-			log.Fatalf("Error opening file in router: %v", err)
-		}
-		defer file.Close()
-
-		// Read the file contents into a byte slice
-		fileBytes, err := io.ReadAll(file)
-		if err != nil {
-			log.Fatalf("Error reading file in router: %v", err)
-		}
-
-		// Unmarshal the JSON data into a Person struct
-		var configFile ConfigFile
-		err = json.Unmarshal(fileBytes, &configFile)
-		if err != nil {
-			log.Fatalf("Error unmarshalling JSON: %v", err)
+			log.Fatal(err)
 		}
 
 		c.JSON(http.StatusOK, gin.H{

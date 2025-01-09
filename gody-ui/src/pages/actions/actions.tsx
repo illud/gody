@@ -14,6 +14,9 @@ import Paper from '@mui/material/Paper';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Menu from '../../components/menu/menu'
+import RunIcon from '@mui/icons-material/PlayCircle';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Actions() {
     const navigation = useNavigate();
@@ -61,20 +64,20 @@ function Actions() {
             <br></br>
             <div className="card">
                 <Link to="/create-action">
-                    <button style={{ marginLeft: '10px', float: 'right' }} >
-                        Create new action
+                    <button style={{ marginLeft: '10px', float: 'right' }} className="primary-btn" >
+                        New action
                     </button>
                 </Link>
             </div>
 
             <TableContainer component={Paper} style={{ backgroundColor: '#242424' }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
                     <TableHead>
-                        <TableRow >
-                            <TableCell style={{ color: 'white' }}>Action name</TableCell>
-                            <TableCell align="right" style={{ color: 'white' }}>Created at</TableCell>
-                            <TableCell align="right" style={{ color: 'white' }}>updated at</TableCell>
-                            <TableCell align="right" style={{ color: 'white' }}>Actions</TableCell>
+                        <TableRow>
+                            <TableCell style={{ color: 'white', textAlign: 'center' }}>Action name</TableCell>
+                            <TableCell align="right" style={{ color: 'white', textAlign: 'center' }}>Created at</TableCell>
+                            <TableCell align="right" style={{ color: 'white', textAlign: 'center' }}>updated at</TableCell>
+                            <TableCell align="right" style={{ color: 'white', textAlign: 'center' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -90,15 +93,15 @@ function Actions() {
                                 <TableCell align="right" style={{ color: 'white' }}>{row.updated_at}</TableCell>
                                 <TableCell align="right" style={{ color: 'white' }}>
                                     {
-                                        loading ? <button>Running...</button> : <button onClick={() => RunAction(row.id)}>
-                                            Run
+                                        loading ? <button style={{ marginLeft: '10px' }} className="primary-btn">Running...</button> : <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => RunAction(row.id)}>
+                                            <RunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                                         </button>
                                     }
-                                    <button style={{ marginLeft: '10px' }} onClick={() => goEditAction(row.id, row.action_name, row.project_path, row.steps)}>
-                                        Edit
+                                    <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => goEditAction(row.id, row.action_name, row.project_path, row.steps)}>
+                                        <EditIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                                     </button>
-                                    <button style={{ marginLeft: '10px' }} onClick={() => deleteAction(row.id)}>
-                                        X
+                                    <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => deleteAction(row.id)}>
+                                        <DeleteIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                                     </button>
                                 </TableCell>
 

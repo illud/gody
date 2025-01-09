@@ -1,6 +1,6 @@
 {
     "name": "gody-server",
-    "ip": "localhost",
+    "ip": "",
     "port": "5000",
     "url": "http://localhost"
 }
