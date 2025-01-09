@@ -60,15 +60,21 @@ func Router() *gin.Engine {
 
 	router := gin.New()
 
+	configFile, err := configFile.ConfigFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:  []string{"*"},
-		AllowMethods:  []string{"POST", "OPTIONS", "GET", "PUT", "DELETE"},
-		AllowHeaders:  []string{"Accept", "Authorization", "Content-Type", "Content-Length", "X-CSRF-Token", "Token", "session", "Origin", "Host", "Connection", "Accept-Encoding", "Accept-Language", "X-Requested-With"},
-		ExposeHeaders: []string{"X-Total-Count", "Content-Range"},
+		AllowOrigins:     configFile.AllowOrigins,
+		AllowMethods:     []string{"POST", "OPTIONS", "GET", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type", "Content-Length", "X-CSRF-Token", "Token", "session", "Origin", "Host", "Connection", "Accept-Encoding", "Accept-Language", "X-Requested-With"},
+		ExposeHeaders:    []string{"X-Total-Count", "Content-Range"},
+		AllowCredentials: true,
 	}))
 
 	//Token Auth Middleware
-	router.Use(TokenAuthMiddleware())
+	// router.Use(TokenAuthMiddleware())
 
 	// Serve static files from the build folder
 	router.StaticFS("/gody", http.Dir("./gody"))
@@ -78,11 +84,6 @@ func Router() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	router.GET("/config", func(c *gin.Context) {
-		configFile, err := configFile.ConfigFile()
-		if err != nil {
-			log.Fatal(err)
-		}
-
 		c.JSON(http.StatusOK, gin.H{
 			"data": configFile,
 		})

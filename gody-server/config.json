@@ -2,5 +2,8 @@
     "name": "gody-server",
     "ip": "",
     "port": "5000",
-    "url": "http://localhost"
+    "url": "http://localhost",
+    "allowOrigins": [
+        "*"
+    ]
 }

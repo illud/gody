@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	Name string `json:"name"`
-	IP   string `json:"ip"`
-	Port string `json:"port"`
-	Url  string `json:"url"`
+	Name         string   `json:"name"`
+	IP           string   `json:"ip"`
+	Port         string   `json:"port"`
+	Url          string   `json:"url"`
+	AllowOrigins []string `json:"allowOrigins"`
 }
 
 func ConfigFile() (Config, error) {
