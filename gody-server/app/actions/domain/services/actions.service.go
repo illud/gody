@@ -116,6 +116,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 				ExecutionStatus: "Failed",
 				ExecutionError:  err.Error(),
 			})
+			// convert history to string including json format
+			historyString, jsonErr := json.Marshal(history)
+			if jsonErr != nil {
+				return jsonErr
+			}
+
+			createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+				ActionID:  actions.ActionId,
+				Step:      string(historyString),
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+			})
+			if createExecutionHistoryErr != nil {
+				return createExecutionHistoryErr
+			}
 			return err
 		}
 
@@ -128,6 +143,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 				ExecutionStatus: "Failed",
 				ExecutionError:  err.Error(),
 			})
+			// convert history to string including json format
+			historyString, jsonErr := json.Marshal(history)
+			if jsonErr != nil {
+				return jsonErr
+			}
+
+			createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+				ActionID:  actions.ActionId,
+				Step:      string(historyString),
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+			})
+			if createExecutionHistoryErr != nil {
+				return createExecutionHistoryErr
+			}
 			return err
 		}
 
@@ -140,6 +170,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 				ExecutionStatus: "Failed",
 				ExecutionError:  err.Error(),
 			})
+			// convert history to string including json format
+			historyString, jsonErr := json.Marshal(history)
+			if jsonErr != nil {
+				return jsonErr
+			}
+
+			createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+				ActionID:  actions.ActionId,
+				Step:      string(historyString),
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+			})
+			if createExecutionHistoryErr != nil {
+				return createExecutionHistoryErr
+			}
 			return err
 		}
 
@@ -170,6 +215,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -189,6 +249,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -201,6 +276,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -217,6 +307,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  string(errBytes),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return errors.New("Command failed: " + string(errBytes))
 			}
 
@@ -230,6 +335,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -258,6 +378,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -274,6 +409,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -287,6 +437,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 					ExecutionStatus: "Failed",
 					ExecutionError:  err.Error(),
 				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
 				return err
 			}
 
@@ -311,6 +476,21 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 				ExecutionStatus: "Failed",
 				ExecutionError:  err.Error(),
 			})
+			// convert history to string including json format
+			historyString, jsonErr := json.Marshal(history)
+			if jsonErr != nil {
+				return jsonErr
+			}
+
+			createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+				ActionID:  actions.ActionId,
+				Step:      string(historyString),
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+			})
+			if createExecutionHistoryErr != nil {
+				return createExecutionHistoryErr
+			}
 			return err
 		}
 

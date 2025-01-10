@@ -1,22 +1,17 @@
 
 
 import '../../App.css'
-import {  DeleteActionsApi } from './api'
+import { DeleteActionsApi } from './api'
 import { useEffect, useState } from 'react';
 import { GetActionsApi } from './api';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Menu from '../../components/menu/menu'
 import RunIcon from '@mui/icons-material/PlayCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Card, CardContent, CardActions, Button, Typography, Grid } from '@mui/material';
 
 function Actions() {
     const navigation = useNavigate();
@@ -70,56 +65,50 @@ function Actions() {
                 </Link>
             </div>
 
-            <TableContainer component={Paper} style={{ backgroundColor: '#242424' }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table" >
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ color: 'white', textAlign: 'center' }}>Action name</TableCell>
-                            <TableCell align="right" style={{ color: 'white', textAlign: 'center' }}>Created at</TableCell>
-                            <TableCell align="right" style={{ color: 'white', textAlign: 'center' }}>updated at</TableCell>
-                            <TableCell align="right" style={{ color: 'white', textAlign: 'center' }}>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {actions.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row" style={{ color: 'white' }}>
+            <Grid container spacing={2} style={{ backgroundColor: '#242424' }}>
+                {actions.map((row) => (
+                    <Grid item xs={12} sm={6} md={4} key={row.id}>
+                        <Card style={{ backgroundColor: '#333', color: 'white' }}>
+                            <CardContent>
+                                <Typography variant="h6" component="div" style={{ textAlign: 'center' }}>
                                     {row.action_name}
-                                </TableCell>
-                                <TableCell align="right" style={{ color: 'white' }}>{row.created_at}</TableCell>
-                                <TableCell align="right" style={{ color: 'white' }}>{row.updated_at}</TableCell>
-                                <TableCell align="right" style={{ color: 'white' }}>
-                                    {
-                                        // loading ? <button style={{ marginLeft: '10px' }} className="primary-btn">Running...</button> : <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => RunAction(row.id)}>
-                                        //     <RunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                                        // </button>
-
-                                        <Link to={`/actions-details/${row.id}`}>
-                                            <button style={{ marginLeft: '10px' }} className="primary-btn">
-                                                <RunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                                            </button>
-                                        </Link>
-                                    }
-                                    <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => goEditAction(row.id, row.action_name, row.project_path, row.steps)}>
-                                        <EditIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                                    </button>
-                                    <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => deleteAction(row.id)}>
-                                        <DeleteIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                                    </button>
-                                </TableCell>
-
-                                {/* <TableCell align="right">{row.calories}</TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
-                                <TableCell align="right">{row.protein}</TableCell> */}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer >
+                                </Typography>
+                                <Typography variant="body2" style={{ textAlign: 'center' }}>
+                                    <strong>Created at:</strong> {row.created_at}
+                                </Typography>
+                                <Typography variant="body2" style={{ textAlign: 'center' }}>
+                                    <strong>Updated at:</strong> {row.updated_at}
+                                </Typography>
+                            </CardContent>
+                            <CardActions style={{ justifyContent: 'center' }}>
+                                <Link to={`/actions-details/${row.id}/${row.action_name}`} style={{ textDecoration: 'none' }}>
+                                    <Button variant="contained" color="primary" startIcon={<RunIcon />}>
+                                        Run
+                                    </Button>
+                                </Link>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    startIcon={<EditIcon />}
+                                    style={{ marginLeft: '10px' }}
+                                    onClick={() => goEditAction(row.id, row.action_name, row.project_path, row.steps)}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    startIcon={<DeleteIcon />}
+                                    style={{ marginLeft: '10px' }}
+                                    onClick={() => deleteAction(row.id)}
+                                >
+                                    Delete
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
             <ToastContainer />
         </>
     )

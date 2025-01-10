@@ -20,7 +20,7 @@ function App() {
           <Route path="/create-action" element={<CreateAction />} />
           <Route path="/edit-action" element={<EditAction />} />
           <Route path="/actions" element={<Actions />} />
-          <Route path="/actions-details/:id" element={<ActionDetails />} />
+          <Route path="/actions-details/:id/:action_name" element={<ActionDetails />} />
         </Routes>
       </HashRouter>
     </>
