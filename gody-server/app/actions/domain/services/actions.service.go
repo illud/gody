@@ -3,17 +3,27 @@ package services
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
+	"time"
 
 	ftp "github.com/gody-server/adapters/ftp"
 	githubAdatpter "github.com/gody-server/adapters/gogithub"
 	actionsModel "github.com/gody-server/app/actions/domain/models"
 	actionsInterface "github.com/gody-server/app/actions/domain/repositories"
+	executionhistoryModel "github.com/gody-server/app/executionhistory/domain/models"
+	executionhistoryServices "github.com/gody-server/app/executionhistory/domain/services"
+	executionhistoryDatabase "github.com/gody-server/app/executionhistory/infraestructure"
 )
+
+// Create a executionhistoryDb instance
+var executionhistoryDb = executionhistoryDatabase.NewExecutionhistoryDb()
+
+// Create a Service instance using the executionhistoryDb
+var executionService = executionhistoryServices.NewService(executionhistoryDb)
 
 type Service struct {
 	actionsRepository actionsInterface.IActions
@@ -75,6 +85,8 @@ const (
 )
 
 func (s *Service) Run(actions actionsModel.ActionRun) error {
+	var history []executionhistoryModel.Step
+
 	actionResult, err := s.GetOneActions(actions.ActionId)
 	if err != nil {
 		return err
@@ -87,32 +99,63 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 	}
 
 	originalDir, err := os.Getwd()
-	fmt.Println("originalDir github: ", originalDir)
 	if err != nil {
 		return err
 	}
 
 	if action.Github.GithubExecute {
+		start := time.Now()
+
 		// Change the working directory to the project path
 		absPath, err := filepath.Abs(action.Github.GithubProjectPath)
 		if err != nil {
+			history = append(history, executionhistoryModel.Step{
+				ExecutionName:   "Github",
+				ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+				ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+				ExecutionStatus: "Failed",
+				ExecutionError:  err.Error(),
+			})
 			return err
 		}
 
 		err = os.Chdir(absPath)
 		if err != nil {
+			history = append(history, executionhistoryModel.Step{
+				ExecutionName:   "Github",
+				ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+				ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+				ExecutionStatus: "Failed",
+				ExecutionError:  err.Error(),
+			})
 			return err
 		}
 
 		err = githubAdatpter.CheckAndUpdateRepository(action.Github.GithubToken, action.Github.RepositoryOwner, action.Github.RepositoryName, action.Github.BranchName, action.Github.GithubProjectPath)
 		if err != nil {
+			history = append(history, executionhistoryModel.Step{
+				ExecutionName:   "Github",
+				ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+				ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+				ExecutionStatus: "Failed",
+				ExecutionError:  err.Error(),
+			})
 			return err
 		}
 
+		history = append(history, executionhistoryModel.Step{
+			ExecutionName:   "Github",
+			ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+			ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+			ExecutionStatus: "Success",
+			ExecutionError:  "",
+		})
 	}
 
 	for _, step := range action.Steps {
 		if step.StepType == BAT {
+			start := time.Now()
+
 			// Step 1: Create a .bat file
 			batFileName := "run.bat"
 			batFileContent := `@echo off ` + "\n" + step.Step
@@ -120,7 +163,13 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 			// Write the content to a .bat file
 			err = os.WriteFile(action.StepsPath+"/"+batFileName, []byte(batFileContent), 0644)
 			if err != nil {
-				fmt.Println("Error creating .bat file:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
 
@@ -133,13 +182,25 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 			// }
 			stderr, err := cmd.StderrPipe() // Capture stderr separately
 			if err != nil {
-				fmt.Println("Error setting up pipes:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
 
 			err = cmd.Start()
 			if err != nil {
-				fmt.Println("Error starting command:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
 
@@ -149,19 +210,40 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 
 			err = cmd.Wait() // Wait for the command to finish
 			if err != nil {
-				fmt.Println("Command execution failed:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  string(errBytes),
+				})
 				return errors.New("Command failed: " + string(errBytes))
 			}
 
 			// Step 3: Delete the .bat file after successful execution
 			err = os.Remove(action.StepsPath + "/" + batFileName)
 			if err != nil {
-				fmt.Println("Error deleting .bat file:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
+
+			history = append(history, executionhistoryModel.Step{
+				ExecutionName:   step.Step,
+				ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+				ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+				ExecutionStatus: "Success",
+				ExecutionError:  "",
+			})
 		}
 
 		if step.StepType == SH {
+			start := time.Now()
 			// Step 1: Create a .sh file
 			shFileName := "run.sh"
 			shFileContent := `#!/bin/bash ` + "\n" + step.Step
@@ -169,7 +251,13 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 			// Write the content to a .sh file
 			err = os.WriteFile(action.StepsPath+"/"+shFileName, []byte(shFileContent), 0644)
 			if err != nil {
-				fmt.Println("Error creating .sh file:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
 
@@ -179,24 +267,60 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 			cmd.Stderr = os.Stderr
 			err = cmd.Run()
 			if err != nil {
-				fmt.Println("Error running .sh file:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
 
 			// Step 3: Delete the .sh file after successful execution
 			err = os.Remove(action.StepsPath + "/" + shFileName)
 			if err != nil {
-				fmt.Println("Error deleting .sh file:", err)
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
 				return err
 			}
+
+			history = append(history, executionhistoryModel.Step{
+				ExecutionName:   step.Step,
+				ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+				ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+				ExecutionStatus: "Success",
+				ExecutionError:  "",
+			})
 		}
 	}
 
 	if action.Ftp.FtpExecute {
+		start := time.Now()
 		err = ftp.Ftp(action.Ftp.FtpServer, action.Ftp.Username, action.Ftp.Password, action.Ftp.ProjectPath, action.Ftp.FtpDirectory)
 		if err != nil {
-			fmt.Println(err)
+			history = append(history, executionhistoryModel.Step{
+				ExecutionName:   "Ftp",
+				ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+				ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+				ExecutionStatus: "Failed",
+				ExecutionError:  err.Error(),
+			})
+			return err
 		}
+
+		history = append(history, executionhistoryModel.Step{
+			ExecutionName:   "Ftp",
+			ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+			ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+			ExecutionStatus: "Success",
+			ExecutionError:  "",
+		})
 	}
 
 	// Run `git pull origin main` to pull the latest changes
@@ -221,10 +345,25 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 		return err
 	}
 
-	err = s.actionsRepository.Run(actions)
+	// convert history to string including json format
+	historyString, err := json.Marshal(history)
 	if err != nil {
 		return err
 	}
+
+	err = executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+		ActionID:  actions.ActionId,
+		Step:      string(historyString),
+		CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+		UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+	})
+	if err != nil {
+		return err
+	}
+	// err = s.actionsRepository.Run(actions)
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

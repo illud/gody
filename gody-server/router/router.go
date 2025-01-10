@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strings"
 
+	executionhistoryController "github.com/gody-server/app/executionhistory/aplication"
+
 	actionsController "github.com/gody-server/app/actions/aplication"
 	tokenController "github.com/gody-server/app/token/aplication"
 
@@ -112,6 +114,13 @@ func Router() *gin.Engine {
 	router.GET("/token/:tokenId", tokenController.GetOneToken)
 	router.PUT("/token/:tokenId", tokenController.UpdateToken)
 	router.DELETE("/token/:tokenId", tokenController.DeleteToken)
+
+	//executionhistory
+	router.POST("/execution-history", executionhistoryController.CreateExecutionhistory)
+	router.GET("/execution-history/all/by-action/:actionId", executionhistoryController.GetExecutionhistory)
+	router.GET("/execution-history/:executionHistoryId", executionhistoryController.GetOneExecutionhistory)
+	router.PUT("/execution-history/:executionHistoryId", executionhistoryController.UpdateExecutionhistory)
+	router.DELETE("/execution-history/:executionHistoryId", executionhistoryController.DeleteExecutionhistory)
 
 	return router
 }

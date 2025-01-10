@@ -11,6 +11,10 @@
     {
       "moduleName": "token",
       "endpointName": "token"
+    },
+    {
+      "moduleName": "executionhistory",
+      "endpointName": "execution-history"
     }
   ]
 }

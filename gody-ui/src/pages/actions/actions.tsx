@@ -1,7 +1,7 @@
 
 
 import '../../App.css'
-import { Run, DeleteActionsApi } from './api'
+import {  DeleteActionsApi } from './api'
 import { useEffect, useState } from 'react';
 import { GetActionsApi } from './api';
 import Table from '@mui/material/Table';
@@ -12,7 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Link, useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import Menu from '../../components/menu/menu'
 import RunIcon from '@mui/icons-material/PlayCircle';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,7 +22,7 @@ function Actions() {
     const navigation = useNavigate();
 
     const [actions, setActions] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
+    // const [setLoading] = useState(false);
 
     const getActions = async () => {
         let result: any = await GetActionsApi();
@@ -38,17 +38,17 @@ function Actions() {
         }
     }
 
-    const RunAction = async (actionId: number) => {
-        setLoading(true);
-        let result: any = await Run(actionId);
-        if (result.error) {
-            toast(result.error, { type: 'error' });
-        } else if (result.data === "actions executed successfully") {
-            toast('Actions executed successfully', { type: 'success' });
-            getActions()
-        }
-        setLoading(false);
-    }
+    // const RunAction = async (actionId: number) => {
+    //     setLoading(true);
+    //     let result: any = await Run(actionId);
+    //     if (result.error) {
+    //         toast(result.error, { type: 'error' });
+    //     } else if (result.data === "actions executed successfully") {
+    //         toast('Actions executed successfully', { type: 'success' });
+    //         getActions()
+    //     }
+    //     setLoading(false);
+    // }
 
     const goEditAction = (actionId: number, actionName: String, actionPath: String, steps: String) => {
         navigation('/edit-action', { state: { actionId, actionName, actionPath, steps } })
@@ -93,9 +93,15 @@ function Actions() {
                                 <TableCell align="right" style={{ color: 'white' }}>{row.updated_at}</TableCell>
                                 <TableCell align="right" style={{ color: 'white' }}>
                                     {
-                                        loading ? <button style={{ marginLeft: '10px' }} className="primary-btn">Running...</button> : <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => RunAction(row.id)}>
-                                            <RunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                                        </button>
+                                        // loading ? <button style={{ marginLeft: '10px' }} className="primary-btn">Running...</button> : <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => RunAction(row.id)}>
+                                        //     <RunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                                        // </button>
+
+                                        <Link to={`/actions-details/${row.id}`}>
+                                            <button style={{ marginLeft: '10px' }} className="primary-btn">
+                                                <RunIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                                            </button>
+                                        </Link>
                                     }
                                     <button style={{ marginLeft: '10px' }} className="primary-btn" onClick={() => goEditAction(row.id, row.action_name, row.project_path, row.steps)}>
                                         <EditIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

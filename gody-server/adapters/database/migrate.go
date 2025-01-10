@@ -5,12 +5,13 @@ import (
 
 	bcrypt "github.com/gody-server/adapters/bcrypt"
 	actionsModel "github.com/gody-server/app/actions/domain/models"
+	executionhistoryModel "github.com/gody-server/app/executionhistory/domain/models"
 	usersModel "github.com/gody-server/app/users/domain/models"
 )
 
 func Migrate() error {
 
-	Client().AutoMigrate(&usersModel.Users{}, &actionsModel.Actions{})
+	Client().AutoMigrate(&usersModel.Users{}, &actionsModel.Actions{}, &executionhistoryModel.Executionhistory{})
 	// Inserting a user (this will create a new row in the Users table)
 
 	// Check if the Users table already has any data

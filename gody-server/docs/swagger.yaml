@@ -18,6 +18,11 @@ definitions:
       updated_at:
         type: string
     type: object
+  models.Executionhistory:
+    properties:
+      id:
+        type: integer
+    type: object
   models.LoginRequest:
     properties:
       password:
@@ -181,6 +186,109 @@ paths:
       summary: Post Actions
       tags:
       - Actions
+  /execution-history:
+    get:
+      consumes:
+      - application/json
+      description: Get Executionhistory
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Executionhistory
+      tags:
+      - Executionhistory
+    post:
+      consumes:
+      - application/json
+      description: Post Executionhistory
+      parameters:
+      - description: Body to create Executionhistory
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Executionhistory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Post Executionhistory
+      tags:
+      - Executionhistory
+  /execution-history/{executionHistoryId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Executionhistory
+      parameters:
+      - description: executionHistoryId
+        in: path
+        name: executionHistoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Delete Executionhistory
+      tags:
+      - Executionhistory
+    get:
+      consumes:
+      - application/json
+      description: Get Executionhistory
+      parameters:
+      - description: executionHistoryId
+        in: path
+        name: executionHistoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Get Executionhistory
+      tags:
+      - Executionhistory
+    put:
+      consumes:
+      - application/json
+      description: Put Executionhistory
+      parameters:
+      - description: executionHistoryId
+        in: path
+        name: executionHistoryId
+        required: true
+        type: integer
+      - description: Body to update Executionhistory
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Executionhistory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - BearerAuth: []
+      summary: Put Executionhistory
+      tags:
+      - Executionhistory
   /token:
     get:
       consumes:

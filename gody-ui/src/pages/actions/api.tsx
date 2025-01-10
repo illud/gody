@@ -210,6 +210,26 @@ export const GetActionsApi = async () => {
     }
 }
 
+export const GetActionExecutionHistoryApi = async (actionId: number) => {
+    const config = await getConfigFile(); // Wait for the config to load
+    const apilUrl = config.url + ":" + config.port;
+    try {
+        let rawResult = await fetch(`${apilUrl}/execution-history/all/by-action/${actionId}`, {
+            method: 'GET',
+            credentials: 'omit',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${getTokenFromStore()}`
+            },
+        }).then((response) => response)
+        let result = await rawResult.json()
+        if (result.data) return result
+        else return { data: null }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const DeleteActionsApi = async (actionsId: number) => {
     const config = await getConfigFile(); // Wait for the config to load
     const apilUrl = config.url + ":" + config.port;

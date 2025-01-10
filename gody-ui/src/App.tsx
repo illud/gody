@@ -7,6 +7,7 @@ import Home from './pages/home/home'
 import Actions from './pages/actions/actions'
 import EditAction from './pages/actions/editAction'
 import Login from './pages/login/login'
+import ActionDetails from './pages/actions/actiondetails'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/create-action" element={<CreateAction />} />
           <Route path="/edit-action" element={<EditAction />} />
           <Route path="/actions" element={<Actions />} />
+          <Route path="/actions-details/:id" element={<ActionDetails />} />
         </Routes>
       </HashRouter>
     </>

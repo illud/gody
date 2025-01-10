@@ -217,6 +217,172 @@ const docTemplate = `{
                 }
             }
         },
+        "/execution-history": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Executionhistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Executionhistory"
+                ],
+                "summary": "Get Executionhistory",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Post Executionhistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Executionhistory"
+                ],
+                "summary": "Post Executionhistory",
+                "parameters": [
+                    {
+                        "description": "Body to create Executionhistory",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Executionhistory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/execution-history/{executionHistoryId}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Executionhistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Executionhistory"
+                ],
+                "summary": "Get Executionhistory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "executionHistoryId",
+                        "name": "executionHistoryId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Put Executionhistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Executionhistory"
+                ],
+                "summary": "Put Executionhistory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "executionHistoryId",
+                        "name": "executionHistoryId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Body to update Executionhistory",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Executionhistory"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete Executionhistory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Executionhistory"
+                ],
+                "summary": "Delete Executionhistory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "executionHistoryId",
+                        "name": "executionHistoryId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/token": {
             "get": {
                 "security": [
@@ -648,6 +814,14 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Executionhistory": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },
