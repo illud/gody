@@ -233,8 +233,64 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 				return err
 			}
 
+			// Change the working directory to the project path
+			absPath, err := filepath.Abs(action.StepsPath)
+
+			if err != nil {
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
+				return err
+			}
+
+			err = os.Chdir(absPath)
+			if err != nil {
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
+				return err
+			}
+
 			// Step 2: Run the .bat file
-			cmd := exec.Command(action.StepsPath + "/" + batFileName)
+			cmd := exec.Command("cmd", "/c", batFileName)
 			// stdout, err := cmd.StdoutPipe() // Capture stdout separately
 			// if err != nil {
 			// 	fmt.Println("Error setting up pipes:", err)
@@ -396,8 +452,63 @@ func (s *Service) Run(actions actionsModel.ActionRun) error {
 				return err
 			}
 
+			// Change the working directory to the project path
+			absPath, err := filepath.Abs(action.StepsPath)
+			if err != nil {
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
+				return err
+			}
+
+			err = os.Chdir(absPath)
+			if err != nil {
+				history = append(history, executionhistoryModel.Step{
+					ExecutionName:   step.Step,
+					ExecutionTime:   strconv.FormatFloat(time.Since(start).Seconds(), 'f', 6, 64),
+					ExecutionDate:   time.Now().Format("2006-01-02 15:04:05"),
+					ExecutionStatus: "Failed",
+					ExecutionError:  err.Error(),
+				})
+				// convert history to string including json format
+				historyString, jsonErr := json.Marshal(history)
+				if jsonErr != nil {
+					return jsonErr
+				}
+
+				createExecutionHistoryErr := executionService.CreateExecutionhistory(executionhistoryModel.Executionhistory{
+					ActionID:  actions.ActionId,
+					Step:      string(historyString),
+					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+					UpdatedAt: time.Now().Format("2006-01-02 15:04:05"),
+				})
+				if createExecutionHistoryErr != nil {
+					return createExecutionHistoryErr
+				}
+				return err
+			}
+
 			// Step 2: Run the .sh file
-			cmd := exec.Command("sh", action.StepsPath+"/"+shFileName)
+			cmd := exec.Command("sh", shFileName)
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 			err = cmd.Run()
