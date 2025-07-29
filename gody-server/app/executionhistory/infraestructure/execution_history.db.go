@@ -32,7 +32,7 @@ func (e *ExecutionhistoryDb) CreateExecutionhistory(executionhistory executionhi
 
 func (e *ExecutionhistoryDb) GetExecutionhistory(actionId int) ([]executionhistoryModel.Executionhistory, error) {
 	var executionHistory []executionhistoryModel.Executionhistory
-	result := db.Client().Order("id DESC").Where("action_id = ?", actionId).Find(&executionHistory)
+	result := db.Client().Order("id DESC").Where("action_id = ?", actionId).Limit(5).Find(&executionHistory)
 	if result.Error != nil {
 		return nil, result.Error
 	}
