@@ -76,7 +76,7 @@ func Router() *gin.Engine {
 	}))
 
 	//Token Auth Middleware
-	// router.Use(TokenAuthMiddleware())
+	router.Use(TokenAuthMiddleware())
 
 	// Serve static files from the build folder
 	router.StaticFS("/gody", http.Dir("./gody"))
